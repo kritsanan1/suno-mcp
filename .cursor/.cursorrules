@@ -1,0 +1,244 @@
+# Suno-MCP Cursor Rulebook
+
+## 🚨 CRITICAL REQUIREMENTS
+
+### PowerShell Syntax (MANDATORY)
+- **NEVER use Linux/Unix commands** - Only Windows PowerShell commands
+- **NEVER use `&&`** - Use separate PowerShell commands
+- **NEVER use `cd /d`** - Use `Set-Location` or `cd`
+- **NEVER use `rmdir /s /q`** - Use `Remove-Item -Recurse -Force`
+- **NEVER use `mkdir`** - Use `New-Item -ItemType Directory`
+- **NEVER use `cp` or `mv`** - Use `Copy-Item` and `Move-Item`
+- **ALWAYS use PowerShell cmdlets** - `Get-ChildItem`, `Set-Content`, etc.
+
+### Command Examples (CORRECT):
+```
+✅ Set-Location "D:\path\to\dir"
+✅ New-Item -ItemType Directory -Path "folder"
+✅ Remove-Item -Recurse -Force "path"
+✅ Copy-Item "source" "destination"
+✅ Get-ChildItem -Recurse
+```
+
+### Command Examples (WRONG):
+```
+❌ cd /d D:\path\to\dir
+❌ mkdir folder
+❌ rmdir /s /q path
+❌ cp source destination
+❌ find . -name "*.py"
+❌ command1 && command2
+```
+
+## 🔧 FastMCP Standards (MANDATORY)
+
+### Tool Registration
+- **ALWAYS use `@mcp_app.tool()` decorators**
+- **ALWAYS provide comprehensive docstrings** with Args/Returns
+- **NEVER use multiline docstrings with `"""` inside**
+- **ALWAYS follow FastMCP 2.12 standards**
+
+### Tool Documentation Format:
+```python
+@mcp_app.tool()
+async def tool_name(param: str) -> str:
+    """
+    Brief description of what the tool does.
+
+    More detailed explanation if needed.
+
+    Args:
+        param: Description of the parameter
+
+    Returns:
+        Description of the return value
+    """
+```
+
+### Server Structure
+- **ALWAYS use FastMCP FastAPI integration**
+- **ALWAYS provide dual interface (stdio + HTTP)**
+- **ALWAYS use proper error handling with custom exceptions**
+- **ALWAYS implement comprehensive logging**
+
+## 🐍 Python Standards
+
+### Code Style
+- **ALWAYS use type hints** for function parameters and returns
+- **ALWAYS use async/await** for I/O operations
+- **ALWAYS use descriptive variable names**
+- **NEVER use bare `except:`** - Always catch specific exceptions
+- **ALWAYS use context managers** for resource management
+
+### Imports
+- **ALWAYS organize imports** in this order:
+  1. Standard library imports
+  2. Third-party imports
+  3. Local imports
+- **ALWAYS use absolute imports** within the package
+- **NEVER use wildcard imports** (`from module import *`)
+
+### Error Handling
+- **ALWAYS create custom exception classes** for domain-specific errors
+- **ALWAYS provide meaningful error messages**
+- **ALWAYS log errors appropriately**
+- **NEVER swallow exceptions** without proper handling
+
+## 🌐 Playwright Automation
+
+### Browser Management
+- **ALWAYS use the BrowserManager class** for browser lifecycle
+- **ALWAYS handle browser cleanup** properly
+- **ALWAYS use robust selectors** (multiple fallback selectors)
+- **ALWAYS implement retry logic** for UI interactions
+
+### Selector Strategy
+- **ALWAYS use multiple selector strategies:**
+  ```python
+  selectors = [
+      '[data-testid="element"]',
+      '.css-class',
+      'button:has-text("Text")',
+      '[data-attribute]'
+  ]
+  await SelectorHelper.try_selectors(page, selectors, "click")
+  ```
+
+## 📁 Project Structure
+
+### File Organization
+- **ALWAYS follow the package structure:**
+  ```
+  src/suno_mcp/
+  ├── __init__.py
+  ├── server.py
+  ├── tools/
+  │   ├── basic/
+  │   └── shared/
+  ```
+- **NEVER create new top-level directories** without approval
+- **ALWAYS place tools in appropriate subdirectories**
+
+### Naming Conventions
+- **ALWAYS use snake_case** for Python files and functions
+- **ALWAYS use PascalCase** for classes
+- **ALWAYS prefix tool functions** with their category (e.g., `suno_`, `studio_`)
+- **NEVER use abbreviations** unless they're standard (e.g., MCP, API)
+
+## 🔒 Security & Best Practices
+
+### Input Validation
+- **ALWAYS validate user inputs** before processing
+- **ALWAYS sanitize file paths** and user data
+- **NEVER trust external inputs** without validation
+
+### Resource Management
+- **ALWAYS close browser instances** properly
+- **ALWAYS handle file operations** safely
+- **ALWAYS use context managers** for resources
+
+### Logging
+- **ALWAYS use the logging module** instead of print statements
+- **ALWAYS set appropriate log levels**
+- **ALWAYS include relevant context** in log messages
+
+## 🎯 Suno-MCP Specific Rules
+
+### Tool Categories
+- **Basic tools ONLY:** Login, generate, download, status
+- **NEVER implement Studio tools** - They're vaporware
+- **NEVER claim to automate Suno Studio** - It's not feasible
+- **ALWAYS be honest about capabilities**
+
+### API Design
+- **ALWAYS return meaningful strings** from tools
+- **ALWAYS provide progress feedback** for long operations
+- **ALWAYS handle rate limits** gracefully
+- **ALWAYS respect Suno's terms of service**
+
+### Testing
+- **ALWAYS test with free tier first**
+- **ALWAYS mock external dependencies** in unit tests
+- **ALWAYS use descriptive test names**
+- **NEVER make real API calls** in automated tests
+
+## 🚫 ABSOLUTELY FORBIDDEN
+
+### Commands & Syntax
+- ❌ `&&` (command chaining)
+- ❌ `cd /d` (use `Set-Location`)
+- ❌ `mkdir` (use `New-Item -ItemType Directory`)
+- ❌ `rmdir /s /q` (use `Remove-Item -Recurse -Force`)
+- ❌ `cp`, `mv`, `ls` (use PowerShell equivalents)
+- ❌ `grep`, `sed`, `awk` (use PowerShell cmdlets)
+
+### Code Patterns
+- ❌ Bare `except:` clauses
+- ❌ Wildcard imports
+- ❌ Global variables (except constants)
+- ❌ Print statements for logging
+- ❌ Synchronous I/O in async functions
+
+### Project Violations
+- ❌ Implementing fake Studio automation
+- ❌ Making false claims about capabilities
+- ❌ Using untested selectors
+- ❌ Breaking FastMCP standards
+
+## ✅ APPROVED PATTERNS
+
+### Terminal Commands
+```
+✅ Set-Location "path"
+✅ New-Item -ItemType Directory -Path "folder"
+✅ Remove-Item -Recurse -Force "path"
+✅ Get-ChildItem -Recurse
+✅ Copy-Item "source" "dest"
+✅ Move-Item "source" "dest"
+```
+
+### Python Code
+```python
+# ✅ Correct FastMCP tool
+@mcp_app.tool()
+async def suno_generate_track(
+    prompt: str,
+    style: Optional[str] = None
+) -> str:
+    """
+    Generate a music track with AI.
+
+    Args:
+        prompt: Description of desired music
+        style: Optional musical style
+
+    Returns:
+        Success message with track details
+    """
+    # Implementation here
+    return f"Generated track: {prompt}"
+
+# ✅ Correct error handling
+try:
+    result = await some_async_operation()
+except SpecificException as e:
+    logger.error(f"Operation failed: {e}")
+    raise CustomError(f"User-friendly message: {e}")
+```
+
+## 📚 REFERENCE LINKS
+
+- [FastMCP Documentation](https://fastmcp.com)
+- [Playwright Python Docs](https://playwright.dev/python/)
+- [PowerShell Cmdlet Reference](https://docs.microsoft.com/en-us/powershell/)
+- [Python Async Best Practices](https://realpython.com/async-io-python/)
+
+## 🎯 PROJECT GOALS
+
+1. **Honest Implementation** - Only claim what actually works
+2. **Production Ready** - Proper error handling, logging, testing
+3. **Maintainable Code** - Clean architecture, good documentation
+4. **Windows Native** - PowerShell commands, Windows paths
+5. **MCP Compliant** - Follow FastMCP 2.12 standards exactly
+
+**REMEMBER: This project was cleaned up after attempting to implement impossible Studio automation. Stay focused on the working Suno AI integration!**
